@@ -1,68 +1,49 @@
-# demo10
+# Quarkus :heart: Logbook (Old versions)
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This is a sample project to use Quarkus/Resteasy/Logbook together.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+> Similar to [quarkus-logbook](https://github.com/msdousti/quarkus-logbook), but for older versions of Quarkus/Logbook
 
-## Running the application in dev mode
+It was created as a reponse to [Logbook issue 1384](https://github.com/zalando/logbook/issues/1384), which claims:
 
-You can run your application in dev mode that enables live coding using:
+> Quarkus Resteasy endpoint returning 500 to client after HEAD request because of Logbook NullPointerException
 
-```shell script
+Note that the versions of Quarkus & Logbook in the ticket above is **exactly the same** as in this repository.
+
+## How to test
+
+1. **Terminal 1:** Run the project
+```
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+2. **Terminal 2:** Send a HEAD request, and note `200 OK`.
 
-## Packaging and running the application
+```bash
+curl -vI http://localhost:8080/handler/test
+*   Trying 127.0.0.1:8080...
+* Connected to localhost (127.0.0.1) port 8080 (#0)
+> HEAD /handler/test HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.1.2
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+HTTP/1.1 200 OK
+< Content-Type: application/json
+Content-Type: application/json
 
-The application can be packaged using:
-
-```shell script
-./mvnw package
+<
+* Connection #0 to host localhost left intact
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+3. **Terminal 1:** Notince that Logbook has added the following logs:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
 ```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+2023-11-01 09:49:02,531 TRACE [org.zal.log.Logbook] (executor-thread-0) Incoming Request: 8633f81edbb45924
+Remote: localhost:8080
+HEAD http://localhost:8080/handler/test HTTP/1.1
+Accept: */*
+Host: localhost:8080
+User-Agent: curl/8.1.2
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/demo10-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- RESTEasy Reactive ([guide](https://quarkus.io/guides/resteasy-reactive)): A JAX-RS implementation utilizing build time
-  processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions
-  that depend on it.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
